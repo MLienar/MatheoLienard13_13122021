@@ -1,8 +1,6 @@
 import FeatureItem from "./FeatureItem"
 import { iconChat, iconMoney, iconSecurity } from "../../../assets/img"
 import styled from "styled-components"
-import { doesNotReject } from "assert"
-
 
 const featuresArray = [
     {
@@ -38,8 +36,8 @@ const FeatureDiv = styled.section`
 export default function Features () {
     return(
         <FeatureDiv>
-            { featuresArray.map((feature) =>
-            <FeatureItem feature={feature}/>
+            { featuresArray.map((feature, index) =>
+            <FeatureItem feature={feature} key={index}/>
             )}
         </FeatureDiv>
     )
