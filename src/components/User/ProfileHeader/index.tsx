@@ -1,6 +1,10 @@
-import { useSelector } from "react-redux"
-import { selectUser } from "../../../services/selectors"
+import { useDispatch, useSelector } from "react-redux"
+import { selectUser, selectLogin } from "../../../services/selectors"
 import styled from "styled-components"
+import Button from "../../common/Button"
+import * as userActions from "../../../features/UserProfile"
+import ProfileInput from "./ProfileInput"
+import EditButton from "./EditButton"
 
 const Header = styled.header`
     color: white;
@@ -8,12 +12,20 @@ const Header = styled.header`
     flex-flow: column nowrap;
     align-items: center;
     justify-content: center;
-    margin-top: 5vh;
+    margin: 3vh 0;
     font-size: 1.5rem;
+`
+
+const DummyDiv = styled.div`
+    display: flex;
+    flex-flow: column nowrap;
+    align-items: center;
+    justify-content: center;
 `
 
 const NameDisplay = styled.div`
     display: flex;
+    margin-bottom: 8px;
 `
 
 const FirstName = styled.h2`
@@ -24,26 +36,63 @@ const LastName = styled(FirstName)`
     margin-right: 0;
 `
 
+const Buttons = styled.div`
+    display:flex;
+`
+
 export default function ProfileHeader () {
     const user = useSelector(selectUser).user
     const firstName = user.firstName
     const lastName = user.lastName
+    const edit = useSelector(selectUser).edit.on
+    const dispatch = useDispatch()
+    const token = useSelector(selectLogin).token
+
+    const activateEdit = () => {
+        dispatch(userActions.toggleEdit(true))
+    }
+    
+    const userChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const propertyToUpdate = e.currentTarget.id
+        const entry = e.currentTarget.value
+        const currentUserInfo = {
+            propertyToUpdate,
+            entry
+        }
+        dispatch(userActions.setNewUser(currentUserInfo)) 
+    }
+
+    const editProfile = () => {
+        dispatch(userActions.editUserProfile(token))
+    }
+
+    const cancelEdit = () => {
+        dispatch(userActions.toggleEdit(false))
+    }
 
     return(
         <Header>
             <h2>Welcome back</h2>
-            { firstName && lastName ? (
-                <NameDisplay>
-                    <FirstName>{ firstName }</FirstName>
-                    <LastName>{ lastName } !</LastName>
-                </NameDisplay>
+            { !edit ? (
+                <DummyDiv>
+                    <NameDisplay>
+                        <FirstName>{ firstName }</FirstName>
+                        <LastName>{ lastName } !</LastName>
+                    </NameDisplay> 
+                    { !edit && ( <Button active text="Edit Name" click={activateEdit}/> )}
+                </DummyDiv>
             ) : (
-                <NameDisplay>
-                    <h2>{ firstName }</h2>
-                    <h2>{ lastName }</h2>
-                </NameDisplay>
+                <DummyDiv>
+                    <NameDisplay>
+                    <ProfileInput type="first" handleInput={userChange} placeholder={user.firstName} />  
+                    <ProfileInput type="last" handleInput={userChange} placeholder={user.lastName}/>
+                    </NameDisplay> 
+                    <Buttons>
+                        <EditButton type="cancel" text="Cancel" click={cancelEdit}/>
+                        <EditButton type="save" text="Save" click={editProfile}/>
+                    </Buttons> 
+                 </DummyDiv>
             )}
-           
         </Header>
     )
 }

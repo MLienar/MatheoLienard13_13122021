@@ -7,6 +7,7 @@ import { selectLogin } from "../../../services/selectors"
 const Container = styled.div`
     display: flex;
     align-items: center;
+    margin-bottom: 15px;
 `
 const Label = styled.label`
     margin-left: 0.5rem;

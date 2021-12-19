@@ -4,18 +4,24 @@ import AccountType from "./AccountType"
 import AccountBalance from "./AccountBalance"
 import AccountSubtitle from "./AccountSubtitle"
 
-interface AccountDetails {
+type AccountDetails = {
     amount: number,
     accountName: string,
     available: boolean,
     code: string
 }
 
+interface Props {
+    account: AccountDetails
+}
+
 const Block = styled.div`
     display: flex;
     background: white;
-    padding: 20px;
+    padding: 20px 30px;
+    margin: 20px 0;
     justify-content: space-between;
+    align-items: center;
     width: clamp(400px, 50vw, 800px);
 `
 
@@ -26,15 +32,16 @@ const Details = styled.div`
     align-items: flex-start;
 `
 
-export default function AccountBlock(props: AccountDetails) {
+export default function AccountBlock(props: Props) {
+    const account = props.account
     return(
         <Block>
             <Details>
-                <AccountType type={props.accountName} code={props.code}/>
-                <AccountBalance balance={props.amount} />
-                <AccountSubtitle available={props.available}/>
+                <AccountType type={account.accountName} code={account.code}/>
+                <AccountBalance balance={account.amount} />
+                <AccountSubtitle available={account.available}/>
             </Details>
-            <Button text="View transactions" />
+            <Button text="View transactions" active />
         </Block>
     )
 }

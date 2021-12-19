@@ -18,6 +18,7 @@ const Input = styled.input`
 
 interface Props {
     type: string,
+    placeholder?: string
     handleInput: (e: React.ChangeEvent<HTMLInputElement>) => void ;
 }
 
@@ -25,7 +26,7 @@ export default function FormInput (props:Props) {
     return(
         <InputContainer>
             <Label htmlFor={props.type}>{props.type}</Label>
-            <Input type={props.type} id={props.type} onChange={props.handleInput}/>
+            <Input type={props.type} id={props.type} onChange={props.handleInput} placeholder={props.placeholder}/>
         </InputContainer>
     )
 

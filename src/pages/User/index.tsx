@@ -4,6 +4,8 @@ import { fetchUserProfile } from '../../features/UserProfile'
 import { selectLogin } from "../../services/selectors"
 import styled from "styled-components"
 import ProfileHeader from "../../components/User/ProfileHeader"
+import AccountBlock from "../../components/User/AccountBlock"
+import accounts from "../../mock/accounts"
 
 const Main  = styled.main`
     background: #12002b;
@@ -24,6 +26,9 @@ export default function User () {
     return(
         <Main>
             <ProfileHeader />
+            {accounts.map((account, index) =>
+                <AccountBlock key={index} account={account} />
+            )}
         </Main>
     )
 }
